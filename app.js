@@ -4,37 +4,73 @@ const promptUser = () => {
   {
     type: 'input',
     name: 'name',
-    message: 'What is your name?'
+    message: 'What is your name?',
+    validate: nameInput => {
+      if (nameInput) {
+        return true;
+      } else {
+        console.log('Please enter your name!')
+        return false
+      }
+      }
   },
   {
     type: 'input',
     name: 'github',
-    message: 'Enter your GitHub Username'
+    message: 'Enter your GitHub Username',
+    validate: githubInput => {
+      if (githubInput) {
+        return true;
+      } else {
+        console.log('Please enter your GutHub username!')
+        return false
+      }
+      }
   },
   {
     type: 'input',
     name: 'about',
-    message: 'Provide some information about yourself'
+    message: 'Provide some information about yourself',
   }
 ])
 };
 
-const promptProject = portfolioProject => {
+const promptProject = portfolioData => {
   console.log(`
   =================
   Add a New Project
   =================
-  `)
+  `);
+  // If there's no 'projects' array property, create one
+  if (!portfolioData.projects) {
+    portfolioData.projects = [];
+  }
   return inquirer.prompt([
     {
       type: 'input',
       name: 'name',
-      message: 'What is the name of your project?'
+      message: 'What is the name of your project? (Required)',
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Please enter your name!')
+          return false
+        }
+        }
     },
     {
       type: 'input',
       name: 'description',
-      message: 'Provide a description of the project (Required)'
+      message: 'Provide a description of the project (Required)',
+      validate: descriptionInput => {
+        if (descriptionInput) {
+          return true;
+        } else {
+          console.log('Please enter your name!')
+          return false
+        }
+        }
     },
     {
       type: 'checkbox',
@@ -45,7 +81,15 @@ const promptProject = portfolioProject => {
     {
       type: 'input',
       name: 'link',
-      message: 'Enter the GitHub link to your project. (Required)'
+      message: 'Enter the GitHub link to your project. (Required)',
+      validate: linkInput => {
+        if (linkInput) {
+          return true;
+        } else {
+          console.log('Please enter your name!')
+          return false
+        }
+        }
     },
     {
       type: 'confirm',
@@ -60,25 +104,29 @@ const promptProject = portfolioProject => {
       default: false
     }
   ])
-  // If there's no 'projects' array property, create one
-  if (!portfolioData.projects) {
-    portfolioData.projects = [];
-  }
+  
 };
 
 promptUser()
-.then(answers => console.log(answers))
-.then(promptProject)
-.then(projectAnswers => console.log(projectAnswers))
-.then(projectData => {
-  portfolioData.projects.push(projectData);
-  //if the user confirms in the confirmAddProject that they would like to add another project
-  if (projectData.confirmAddProject) {
-    return promptProject(portfolioData);
-  } else {
-    return portfolioData;
-  }
-});
+  .then(promptProject)
+  .then(portfolioData => {
+    console.log(portfolioData);
+  });
+
+
+
+// .then(answers => console.log(answers))
+// .then(promptProject)
+// .then(projectAnswers => console.log(projectAnswers))
+// .then(projectData => {
+//   portfolioData.projects.push(projectData);
+//   //if the user confirms in the confirmAddProject that they would like to add another project
+//   if (projectData.confirmAddProject) {
+//     return promptProject(portfolioData);
+//   } else {
+//     return portfolioData;
+//   }
+// });
 
 // const fs = require('fs');
 // const generatePage = require('./src/page-template');
